@@ -1,59 +1,66 @@
-//
-// Created by Kate on 14.11.2024.
-//
-
 #ifndef MERGESORT_H
 #define MERGESORT_H
-#include "Sequence/MutableArraySequence.h"
 
+#include "ISorter.h"
+#include <vector> // For temporary storage during merge
 
 template <typename T, typename Comparator>
 class MergeSort : public ISorter<T, Comparator> {
 public:
-    // Сортировка слиянием
+    // Public sort method
     void sort(SharedPtr<Sequence<T>> sequence, Comparator comp) override {
-        if (sequence->getLength() <= 1) return; // уже отсортировано
-        mergeSort(sequence, 0, sequence->getLength() - 1, comp);
+        int n = sequence->getLength();
+        if (n <= 1) return; // Already sorted
+        mergeSort(sequence, 0, n - 1, comp);
     }
 
 private:
-
+    // Recursive merge sort
     void mergeSort(SharedPtr<Sequence<T>> sequence, int left, int right, Comparator comp) {
-        if (left >= right) return;
+        if (left >= right) return; // Base case
         int mid = left + (right - left) / 2;
 
-        // сортируем две половины
+        // Sort both halves
         mergeSort(sequence, left, mid, comp);
         mergeSort(sequence, mid + 1, right, comp);
 
-        // cливаем отсортированные половины
+        // Merge sorted halves
         merge(sequence, left, mid, right, comp);
     }
 
+    // Merging function
     void merge(SharedPtr<Sequence<T>> sequence, int left, int mid, int right, Comparator comp) {
         int leftSize = mid - left + 1;
         int rightSize = right - mid;
 
-        Sequence<T> leftSequence(leftSize);
-        Sequence<T> rightSequence(rightSize);
+        // Temporary arrays for left and right halves
+        std::vector<T> leftSequence(leftSize);
+        std::vector<T> rightSequence(rightSize);
 
-        // Копируем данные
+        // Copy data to temporary arrays
         for (int i = 0; i < leftSize; ++i)
-            leftSequence.set(i, sequence->get(left + i));
+            leftSequence[i] = (*sequence)[left + i];
         for (int j = 0; j < rightSize; ++j)
-            rightSequence.set(j, sequence->get(mid + 1 + j));
+            rightSequence[j] = (*sequence)[mid + 1 + j];
 
+        // Merge back into original sequence
         int i = 0, j = 0, k = left;
-
-        while (i < leftSize || j < rightSize) {
-            if (i < leftSize && (j >= rightSize || comp(leftSequence.get(i), rightSequence.get(j)))) {
-                sequence->set(k++, leftSequence.get(i++));
+        while (i < leftSize && j < rightSize) {
+            if (comp(leftSequence[i], rightSequence[j])) {
+                (*sequence)[k++] = leftSequence[i++];
             } else {
-                sequence->set(k++, rightSequence.get(j++));
+                (*sequence)[k++] = rightSequence[j++];
             }
+        }
+
+        // Copy remaining elements
+        while (i < leftSize) {
+            (*sequence)[k++] = leftSequence[i++];
+        }
+        while (j < rightSize) {
+            (*sequence)[k++] = rightSequence[j++];
         }
     }
 };
-
 
 #endif //MERGESORT_H

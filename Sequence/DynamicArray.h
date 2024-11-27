@@ -4,7 +4,7 @@
 #include "Exception.h"
 #include "Sequence.h"
 #include "LinkedList.h"
-#include "Pointers/UnqPtr.h"
+#include "../Pointers/UnqPtr.h"
 
 template <typename T>
 class DynamicArray {

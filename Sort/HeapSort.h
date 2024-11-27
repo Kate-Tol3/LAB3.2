@@ -2,9 +2,7 @@
 // Created by Kate on 14.11.2024.
 //
 
-#ifndef HEAPSORT_H
-#define HEAPSORT_H
-
+#pragma once
 #include "ISorter.h"
 
 template <typename T, typename Comparator>
@@ -40,16 +38,16 @@ private:
         int r = 2 * i + 2; // right = 2*i + 2
 
         // If left child is larger than root
-        if (l < n && comp(sequence[l], sequence[largest])) {
+        if (l < n && comp((*sequence)[largest], (*sequence)[l])) {
             largest = l;
         }
         // If right child is larger than largest so far
-        if (r < n && comp(sequence[largest], sequence[r])){
+        if (r < n && comp((*sequence)[largest], (*sequence)[r])){
             largest = r;
         }
         // If largest is not root
         if (largest != i) {
-            std::swap(sequence[i], sequence[largest]);
+            std::swap((*sequence)[i], (*sequence)[largest]);
 
             // Recursively heapify the affected sub-tree
             heapify(sequence, n, largest, comp);
@@ -68,7 +66,7 @@ public:
         // One by one extract an element from heap
         for (int i = n - 1; i >= 0; i--) {
             // Move current root to end
-            std::swap(sequence[0], sequence[i]);
+            std::swap((*sequence)[0], (*sequence)[i]);
 
             // call max heapify on the reduced heap
             heapify(sequence, i, 0, comp);

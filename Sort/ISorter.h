@@ -1,11 +1,10 @@
-//
-// Created by Kate on 14.11.2024.
-//
+#pragma once
 
-#ifndef ISORTER_H
-#define ISORTER_H
-#include "Sequence/MutableArraySequence.h"
-#include "Pointers/SharedPtr.h"
+// #include "../Pointers/SharedPtr.h"
+// #include "../Sequence/Sequence.h"
+#include "../Pointers/SharedPtr.h"
+#include "../Sequence/Sequence.h"
+#include "../Sequence/MutableSequence.h"
 
 
 template <typename T, typename Comparator>
@@ -17,4 +16,3 @@ public:
     virtual void sort(SharedPtr<Sequence<T>> sequence, Comparator comp) = 0;
 };
 
-#endif //ISORTER_H

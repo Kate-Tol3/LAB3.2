@@ -4,16 +4,21 @@
 
 template <typename T>
 struct ControlBlock {
-    T* s_ptr;           // Указатель на управляемый объект
-    int ref_count;      // Счётчик сильных ссылок (SharedPtr)
-    int weak_count;     // Счётчик слабых ссылок (WeakPtr)
+    T* s_ptr;             // Pointer to the managed object or array
+    int ref_count;        // Strong reference count (SharedPtr)
+    int weak_count;       // Weak reference count (WeakPtr)
+    bool is_array;        // Flag to indicate if s_ptr is an array
 
+    ControlBlock(T* ptr = nullptr, bool isArray = false)
+        : s_ptr(ptr), ref_count(1), weak_count(0), is_array(isArray) {}
 
-    ControlBlock(T* ptr = nullptr) : s_ptr(ptr), ref_count(1), weak_count(0) {}
-
-    // Уничтожение объекта, но не самого контрольного блока
+    // Destroy the managed object or array, but not the control block itself
     void deleteObject() {
-        delete s_ptr;
+        if (is_array) {
+            delete[] s_ptr;
+        } else {
+            delete s_ptr;
+        }
         s_ptr = nullptr;
     }
 };
@@ -27,21 +32,27 @@ private:
     ControlBlock<T>* control_block;
 
 public:
+    // Constructor for single objects
+    explicit SharedPtr(T* p = nullptr)
+        : control_block(p ? new ControlBlock<T>(p, false) : nullptr) {}
 
-    explicit SharedPtr(T* p = nullptr) : control_block(p ? new ControlBlock<T>(p) : nullptr) {}
+    // Constructor for arrays
+    explicit SharedPtr(T* p, bool isArray)
+        : control_block(p ? new ControlBlock<T>(p, isArray) : nullptr) {}
 
-    // Копирующий конструктор
+    // Copy constructor
     SharedPtr(const SharedPtr& other) : control_block(other.control_block) {
         if (control_block) {
             ++(control_block->ref_count);
         }
     }
 
-    // Перемещающий конструктор
+    // Move constructor
     SharedPtr(SharedPtr&& other) noexcept : control_block(other.control_block) {
         other.control_block = nullptr;
     }
 
+    // Construct from a WeakPtr
     SharedPtr(const WeakPtr<T>& weak) : control_block(weak.control_block) {
         if (control_block) {
             ++control_block->ref_count;
@@ -52,20 +63,19 @@ public:
         release();
     }
 
-    // Копирующее присваивание
+    // Copy assignment
     SharedPtr& operator=(const SharedPtr& other) {
         if (this != &other) {
             release();
             control_block = other.control_block;
             if (control_block) {
                 ++(control_block->ref_count);
-
             }
         }
         return *this;
     }
 
-    // Перемещающее присваивание
+    // Move assignment
     SharedPtr& operator=(SharedPtr&& other) noexcept {
         if (this != &other) {
             release();
@@ -75,39 +85,48 @@ public:
         return *this;
     }
 
-    // Освобождение ресурса
+    // Resource release
     void release() {
         if (control_block) {
             if (--control_block->ref_count == 0) {
-                control_block->deleteObject();  // Удаляем сам объект
+                control_block->deleteObject();  // Delete the managed object or array
                 if (control_block->weak_count == 0) {
-                    delete control_block;  // Удаляем и контрольный блок, если слабых ссылок больше нет
+                    delete control_block;  // Delete the control block if no weak references exist
                 }
             }
             control_block = nullptr;
         }
     }
 
-    // Доступ к объекту
+    // Access the object (for non-arrays)
     const T& operator*() const {
-        if (expired()) throw std::out_of_range("The pointer have expired.\n");
+        if (expired()) throw std::out_of_range("The pointer has expired.\n");
         return *control_block->s_ptr;
     }
-    const T* operator->() const {
-        if (expired()) throw std::out_of_range("The pointer have expired.\n");
-        return control_block->s_ptr;
+    T& operator*() {
+        if (expired()) throw std::out_of_range("The pointer has expired.\n");
+        return *control_block->s_ptr;
     }
 
-    T& operator*() {
-        if (expired()) throw std::out_of_range("The pointer have expired.\n");
-        return *control_block->s_ptr;
+    // Access the object or array element via pointer (for arrays)
+    const T* operator->() const {
+        if (expired()) throw std::out_of_range("The pointer has expired.\n");
+        return control_block->s_ptr;
     }
     T* operator->() {
-        if (expired()) throw std::out_of_range("The pointer have expired.\n");
+        if (expired()) throw std::out_of_range("The pointer has expired.\n");
         return control_block->s_ptr;
     }
 
+    // Array subscript operator (only for arrays)
+    T& operator[](size_t index) {
+        if (!control_block || !control_block->is_array) {
+            throw std::out_of_range("Not managing an array.\n");
+        }
+        return control_block->s_ptr[index];
+    }
 
+    // Get the raw pointer
     const T* get() const { return control_block ? control_block->s_ptr : nullptr; }
     T* get() { return control_block ? control_block->s_ptr : nullptr; }
 
@@ -118,10 +137,7 @@ public:
     bool isNull() { return control_block == nullptr || control_block->s_ptr == nullptr; }
 
     void swap(SharedPtr& other) noexcept {
-        T* temp_ptr = control_block->s_ptr;
-        control_block->s_ptr = other.control_block->s_ptr;
-        other.control_block->s_ptr = temp_ptr;
-
+        std::swap(control_block, other.control_block);
     }
 
     const bool expired() const {
@@ -133,6 +149,4 @@ public:
     }
 
     friend class WeakPtr<T>;
-
 };
-

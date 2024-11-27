@@ -1,12 +1,12 @@
-//
-// Created by Kate on 19.11.2024.
-//
 
 #ifndef STUDENT_H
 #define STUDENT_H
 #include <string>
 #include <array>
+#include <iostream>
+#include <ostream>
 #include <stdexcept>
+using namespace std;/////удалить
 
 struct Date {
 
@@ -32,6 +32,29 @@ struct Date {
   int& operator[](int index) {
     if (index < 0 || index >= 3) throw std::out_of_range("index is out of range");
     return date[index];
+  }
+
+  //операторы поменялись местами так как сортируем от новых к старым
+  bool operator<(const Date& other) const {
+    if (date[2] != other.date[2]) {
+      // std::cout << date[2] << " " << other.date[2] << std::endl;
+      // std::cout << (date[2] < other.date[2]) << std::endl;
+      return date[2] < other.date[2];
+    } else if (date[1] != other.date[1]) {
+      return date[1] < other.date[1];
+    } else {
+      return date[0] < other.date[0];
+    }
+  }
+
+  bool operator>(const Date& other) const {
+    if (date[2] != other.date[2]) {
+      return date[2] > other.date[2];
+    } else if (date[1] != other.date[1]) {
+      return date[1] > other.date[1];
+    } else {
+      return date[0] > other.date[0];
+    }
   }
 
   friend std::istream& operator>>(std::istream& is, Date& date);
@@ -89,6 +112,41 @@ public:
   friend std::istream& inputFromFile(std::istream& is, Student& student);
 };
 
+struct compareByID {
+  bool operator()(const Student& s1, const Student& s2) const {
+    return s1.getID() < s2.getID();
+  }
+};
+
+struct compareByEnrollYear {
+  bool operator()(const Student& s1, const Student& s2) const {
+    return s1.getEnrollmentYear()< s2.getEnrollmentYear();
+  }
+};
+
+struct compareByLastName { // по алфавиту
+  bool operator()(const Student& s1, const Student& s2) const {
+    return (s1.getLastName().compare(s2.getLastName())) == -1;
+  }
+};
+
+struct compareByFirstName {
+  bool operator()(const Student& s1, const Student& s2) const {
+    return (s1.getFirstName().compare(s2.getFirstName())) == -1;
+  }
+};
+
+struct compareByGroup {
+  bool operator()(const Student& s1, const Student& s2) const {
+    return (s1.getGroup().compare(s2.getGroup())) == -1;
+  }
+};
+
+struct compareByBirthDate {
+  bool operator()(const Student& s1, const Student& s2) const {
+    return s1.getBirthDate() < s2.getBirthDate();
+  }
+};
 
 
 #endif //STUDENT_H

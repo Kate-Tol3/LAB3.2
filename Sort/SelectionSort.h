@@ -12,11 +12,11 @@ public:
         for (int i = 0; i < n - 1; ++i) { // < n
             int minIdx = i;
             for (int j = i + 1; j < n; ++j) {
-                if (comp(sequence[j],  sequence[minIdx])) {
+                if (comp((*sequence)[j],  (*sequence)[minIdx])) {
                     minIdx = j;
                 }
             }
-            std::swap(sequence[i], sequence[minIdx]);
+            std::swap((*sequence)[i], (*sequence)[minIdx]);
         }
     }
 };

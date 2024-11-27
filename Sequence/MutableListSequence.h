@@ -3,7 +3,7 @@
 #include "MutableSequence.h"
 #include "Sequence.h"
 #include "LinkedList.h"
-#include "SharedPtr.h"
+#include "../Pointers/SharedPtr.h"
 
 template <typename T>
 class MutableListSequence: public MutableSequence<T> {
@@ -20,7 +20,7 @@ public:
 
     ~MutableListSequence() override {}
 
-    T& operator [] (int index) {
+    T& operator [] (int index) override {
         return (*list)[index];
     }
 

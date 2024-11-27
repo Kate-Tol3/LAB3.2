@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Sequence.h"
-#include "Pointers/UnqPtr.h"
+#include "../Pointers/SharedPtr.h"
 #include <iostream>
 #include "Exception.h"
 
@@ -9,7 +9,7 @@
 template <typename T>
 class Node {
 public:
-    UnqPtr<Node<T>> next;
+    SharedPtr<Node<T>> next;
     T value;
     Node(): next(nullptr) {}
     explicit Node(T value): next(nullptr), value(value) {}
@@ -19,14 +19,14 @@ template <typename T>
 class LinkedList {
 private:
     int length = 0;
-    UnqPtr<Node<T>> head;
-    UnqPtr<Node<T>> tail;
+    SharedPtr<Node<T>> head;
+    SharedPtr<Node<T>> tail;
 
 
     Node<T>& getNode(int index) const {
         if (index < 0 || index >= length) throw IndexOutOfRange();
         if (head.get() == nullptr) throw IndexOutOfRange();
-        UnqPtr<Node<T>> bufNode (head);
+        SharedPtr<Node<T>> bufNode (head);
         for (int i = 0; i < index; ++i) {
             bufNode = bufNode->next;
         }
@@ -58,11 +58,11 @@ public:
     LinkedList(int length) {
         if (length < 0) throw IndexOutOfRange();
         if (length > 0) {
-            head = UnqPtr<Node<T>>(new Node<T>());
+            head = SharedPtr<Node<T>>(new Node<T>());
             tail = head;
         }
         for (int i = 1; i < length; ++i) {
-            tail->next = UnqPtr<Node<T>>(new Node<T>());
+            tail->next = SharedPtr<Node<T>>(new Node<T>());
             tail = tail->next;
         }
         this->length = length;
@@ -140,17 +140,17 @@ public:
 
     void append(const T& item) {
         if (length == 0) {
-            head = UnqPtr<Node<T>>(new Node<T>(item));
+            head = SharedPtr<Node<T>>(new Node<T>(item));
             tail = head;
         } else {
-            tail->next = UnqPtr<Node<T>>(new Node<T>(item));
+            tail->next = SharedPtr<Node<T>>(new Node<T>(item));
             tail = tail->next;
         }
         ++length;
     }
 
     void prepend(const T& item) {
-        UnqPtr<Node<T>> newNode(new Node<T>(item));
+        SharedPtr<Node<T>> newNode(new Node<T>(item));
         newNode->next = std::move(head);
         head = std::move(newNode);
         if (length == 0) {
@@ -168,7 +168,7 @@ public:
             append(item);
         } else {
             Node<T>* prevNode = &getNode(index - 1);
-            UnqPtr<Node<T>> newNode(new Node<T>(item));
+            SharedPtr<Node<T>> newNode(new Node<T>(item));
             newNode->next = std::move(prevNode->next);
             prevNode->next = std::move(newNode);
             ++length;
@@ -200,7 +200,7 @@ public:
     }
 
      void print() const {
-        UnqPtr<Node<T>> temp = head;
+        SharedPtr<Node<T>> temp = head;
         while (temp.get()) {
             std::cout << temp->value << " ";
             temp = temp->next;

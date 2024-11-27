@@ -5,7 +5,8 @@
 #include "Sequence.h"
 #include "LinkedList.h"
 #include "DynamicArray.h"
-#include "Pointers/UnqPtr.h"
+#include "../Pointers/UnqPtr.h"
+
 
 template <typename T>
 class MutableArraySequence: public MutableSequence<T> {
@@ -23,7 +24,7 @@ public:
 
     ~MutableArraySequence() override {}
 
-    T& operator[](int index) {
+    T& operator[](int index) override{
         return (*array)[index];
     }
 

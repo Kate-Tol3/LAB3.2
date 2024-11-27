@@ -17,8 +17,8 @@ public:
         int n = sequence->getLength();
         for (int i = 0; i < n - 1; ++i) {
             for (int j = 0; j < n - i - 1; ++j) {
-                if (comp(sequence[j], sequence[j + 1])) {
-                    std::swap(sequence[j], sequence[j + 1]);
+                if (comp((*sequence)[j + 1], (*sequence)[j])) {
+                    std::swap((*sequence)[j], (*sequence)[j + 1]);
                 }
             }
         }

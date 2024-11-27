@@ -12,13 +12,13 @@ public:
         int n = sequence->getLength();
         for (int gap = n / 2; gap > 0; gap /= 2) {
             for (int i = gap; i < n; ++i) {
-                T temp = sequence[i];
+                T temp = (*sequence)[i];
                 int j;
-                for (j = i; j >= gap && comp(temp, sequence[j - gap]); j -= gap) {
-                    sequence[j] = sequence[j - gap];
+                for (j = i; j >= gap && comp(temp, (*sequence)[j - gap]); j -= gap) {
+                    (*sequence)[j] = (*sequence)[j - gap];
                     // sequence->Set(j, sequence->Get(j - gap));
                 }
-                sequence[j] = temp;
+                (*sequence)[j] = temp;
                 //sequence->Set(j, temp);
             }
         }

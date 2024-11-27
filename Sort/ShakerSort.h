@@ -16,14 +16,14 @@ public:
         int left = 0, right = sequence->getLength() - 1;
         while (left <= right) {
             for (int i = left; i < right; ++i) {
-                if (comp(sequence[i + 1], sequence[i])) { //sequence[i] > sequence[i + 1]
-                    std::swap(sequence[i], sequence[i + 1]);
+                if (comp((*sequence)[i + 1], (*sequence)[i])) { //sequence[i] > sequence[i + 1]
+                    std::swap((*sequence)[i], (*sequence)[i + 1]);
                 }
             }
             --right;
             for (int i = right; i > left; --i) {
-                if (comp(sequence[i], sequence[i - 1])) {// if (sequence[i] < sequence[i - 1]) {
-                    std::swap(sequence[i], sequence[i - 1]);
+                if (comp((*sequence)[i], (*sequence)[i - 1])) {// if (sequence[i] < sequence[i - 1]) {
+                    std::swap((*sequence)[i], (*sequence)[i - 1]);
                 }
             }
             ++left;

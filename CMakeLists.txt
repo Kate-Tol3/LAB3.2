@@ -4,6 +4,7 @@ project(localLab3_2)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(localLab3_2 main.cpp
+        Sequence/Sequence.h
         Sort/BubbleSort.h
         Sort/HeapSort.h
         Sort/ShakerSort.h
@@ -19,4 +20,9 @@ add_executable(localLab3_2 main.cpp
         Pointers/WeakPtr.h
         Pointers/UnqPtr.h
         Student.cpp
-        Student.h)
+        Student.h
+        Sequence/DynamicArray.h
+        Sequence/Exception.h
+        Test.cpp
+        Test.h
+)
