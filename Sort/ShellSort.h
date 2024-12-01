@@ -16,10 +16,8 @@ public:
                 int j;
                 for (j = i; j >= gap && comp(temp, (*sequence)[j - gap]); j -= gap) {
                     (*sequence)[j] = (*sequence)[j - gap];
-                    // sequence->Set(j, sequence->Get(j - gap));
                 }
                 (*sequence)[j] = temp;
-                //sequence->Set(j, temp);
             }
         }
     }

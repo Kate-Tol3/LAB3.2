@@ -18,11 +18,9 @@ public:
             int j = i - 1;
             while (j >= 0 && comp(key, (*sequence)[j])) {
                 (*sequence)[j + 1] = (*sequence)[j];
-                //sequence->Set(j + 1, sequence->Get(j));
                 --j;
             }
             (*sequence)[j + 1] = key;
-            //sequence->Set(j + 1, key);
         }
     }
 };

@@ -1,10 +1,6 @@
-//
-// Created by Kate on 14.11.2024.
-//
 
 #ifndef BINARYINSERTIONSORT_H
 #define BINARYINSERTIONSORT_H
-#include <vector>
 
 #include "ISorter.h"
 
@@ -23,8 +19,7 @@ public:
             while (left < right) {
                 int mid = (left + right) / 2;
 
-                // Adjust based on comparator
-                if (comp((*sequence)[mid], key)) // Correct comparison
+                if (comp((*sequence)[mid], key))
                     left = mid + 1;
                 else
                     right = mid;
