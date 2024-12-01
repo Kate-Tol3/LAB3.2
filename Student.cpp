@@ -1,10 +1,6 @@
 #include "Student.h"
-
-
-#include "Student.h"
 #include <cstring>
 #include <limits>
-// #include <iomanip>
 #include <iostream>
 #include <sstream>
 
@@ -12,7 +8,7 @@
 // проверка что строка содержит только буквы
 bool isAlpha(const std::string& str) {
     for (char ch : str) {
-        if (!std::isalpha(ch) && !std::isspace(ch)) { //static_cast<unsigned char>(ch)
+        if (!std::isalpha(ch) && !std::isspace(ch)) {
             return false;
         }
     }
@@ -30,7 +26,7 @@ bool isNumeric(const std::string& str) {
 }
 
 
-///////// методы структуры Date ///////////////////////////////////////////
+///////// методы структуры Date ////////////////////////////////////
 bool Date::isValidDate(int day, int month, int year) {
     if (month < 1 || month > 12) return false; // проверка месяца
     const int daysInMonth[12] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 }; // дней в месяцах
@@ -72,7 +68,7 @@ std::ostream& operator<<(std::ostream& os, const Date& date) {
 Person::Person() : ID(0), birth_date(std::array<int, 3>{{0, 0, 0}}) {
     std::array<int, 3> temp {{0, 0, 0}};
     birth_date = Date(temp);
-}// ?
+}
 
 Person::Person(const std::string& firstName, const std::string& lastName, int id, const std::array<int, 3>& dateArray) :
     first_name(firstName), last_name(lastName), ID(id), birth_date(dateArray) {}
@@ -117,18 +113,17 @@ std::istream& operator>>(std::istream& is, Person& person) {
     buffer.clear();
 
     std::cout << "Enter birth date (format: DD/MM/YYYY):";
-    is >> person.birth_date; // ввод даты через перегруженный оператор
+    is >> person.birth_date; // ввод даты будет через перегруженный оператор
 
     std::cout << "Enter ID:";
     while (true) {
         is >> buffer;
         if (isNumeric(buffer)) {
-            // Конвертируем строку в целое число
             person.ID = std::stoi(buffer);
-            if (person.ID >= 0) break; // Проверка на неотрицательность
+            if (person.ID >= 0) break;
         }
-        is.clear();  // Сброс флагов ошибок
-        is.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Очистка ошибочного ввода
+        is.clear();
+        is.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cout << "Invalid input. Please enter a valid non-negative ID (only digits): ";
     }
     buffer.clear();
@@ -144,21 +139,6 @@ std::ostream& operator<<(std::ostream& os, const Person& person) {
     return os;
 }
 
-// std::istream& inputFromFile(std::istream& is, Person& person) {
-//     std::string firstName, lastName;
-//     int id;
-//     std::array<int, 3> date{};
-//
-//     if (is >> firstName >> lastName >> id >> date[0] >> date[1] >> date[3]) {
-//         person = Person(firstName, lastName, id, date);
-//     } else {
-//         is.clear();
-//         is.setstate(std::ios::failbit);
-//         throw std::runtime_error("Ошибка чтения данных для Person из файла.");
-//     }
-//
-//     return is;
-// }
 
 ////////// методы для класса Student /////////////////////////////
 Student::Student() : Person(), enrollment_year(0), group(){}
@@ -188,7 +168,7 @@ std::istream& operator>>(std::istream& is, Student& student) {
     while (true) {
         std::getline(is, buffer);
         if (isNumeric(buffer)) {
-            if (std::stoi(buffer) >= 0) break; // Проверка на неотрицательность
+            if (std::stoi(buffer) >= 0) break;
         }
         std::cout << "Invalid input. Please enter a valid non-negative enrollment year: ";
         is.clear();
@@ -204,65 +184,14 @@ std::istream& operator>>(std::istream& is, Student& student) {
 
 std::ostream& operator<<(std::ostream& os, const Student& student) {
 
-    os << static_cast<const Person&>(student);// вывод полей для класса Person
+    os << static_cast<const Person&>(student); // вывод полей для класса Person
 
     os << "Enrollment Year: " << student.enrollment_year << "\n";
     os << "Group: " << student.group << "\n";
     return os;
 }
 
-// std::istream& inputFromFile(std::istream& is, Student& student) {
-//
-//     std::string firstName, lastName, group;
-//     int id, enrollmentYear;
-//     std::array<int, 3> date{};
-//
-//     if (is >> firstName >> lastName >> id >> date[0] >> date[1] >> date[3] >> enrollmentYear >> group) {
-//         student = Student(firstName, lastName, id, date, enrollmentYear, group);
-//     } else {
-//         is.clear();
-//         is.setstate(std::ios::failbit);
-//         throw std::runtime_error("Ошибка чтения данных для Person из файла.");
-//     }
-//
-//     return is;
-// }
 
-//  std::istream& inputFromFile(std::istream& is, Student& student) {
-//     std::string line, firstName, lastName,group;
-//     int id, enrollmentYear;
-//     std::array<int, 3> date{};
-//
-//     auto readField = [&](const std::string& prefix, auto& value) {
-//         return std::getline(is, line) && line.starts_with(prefix) &&
-//                std::istringstream(line.substr(prefix.size())) >> value;
-//     };
-//
-//     auto readDate = [&](const std::string& prefix, int& d, int& m, int& y) {
-//         char delim1, delim2;
-//         return std::getline(is, line) && line.starts_with(prefix) &&
-//                std::istringstream(line.substr(prefix.size())) >> d >> delim1 >> m >> delim2 >> y &&
-//                delim1 == '/' && delim2 == '/' && d > 0 && d <= 31 && m > 0 && m <= 12;
-//     };
-//
-//     if (readField("First Name: ", firstName) &&
-//         readField("Last Name: ", lastName) &&
-//         readDate("Birth Date: ", date[0], date[1], date[2]) &&
-//         readField("ID: ", id) &&
-//         readField("Enrollment Year: ", enrollmentYear) &&
-//         readField("Group: ", group)) {
-//         student = Student(firstName, lastName, id, {date[0], date[1], date[2]}, enrollmentYear, group);
-//
-//         // Ensure an empty line follows the student dat
-//     if (std::getline(is, line) && line.empty()) {
-//         return is;
-//     }
-//     else {
-//         is.clear();
-//         is.setstate(std::ios::failbit);
-//         throw std::runtime_error("Ошибка чтения данных для Person из файла.");
-//     }
-// }
 
 
 

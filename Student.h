@@ -6,7 +6,8 @@
 #include <ostream>
 #include <stdexcept>
 
-struct Date {
+class Date {
+public:
 
   int date[3]; // date[0] - день, date[1] - месяц, date[2] - год
 
@@ -32,11 +33,8 @@ struct Date {
     return date[index];
   }
 
-  //операторы поменялись местами так как сортируем от новых к старым
   bool operator<(const Date& other) const {
     if (date[2] != other.date[2]) {
-      // std::cout << date[2] << " " << other.date[2] << std::endl;
-      // std::cout << (date[2] < other.date[2]) << std::endl;
       return date[2] < other.date[2];
     } else if (date[1] != other.date[1]) {
       return date[1] < other.date[1];
@@ -71,7 +69,6 @@ private:
   int ID;
 
 public:
-  // Конструктор
   Person();
   Person(const std::string& firstName, const std::string& lastName, int id, const std::array<int, 3>& dateArray);
   Person(const Person& other);
@@ -86,7 +83,6 @@ public:
   Person& operator=(const Person& other);
   friend std::istream& operator>>(std::istream& is, Person& person);
   friend std::ostream& operator<<(std::ostream& os, const Person& person);
-  //friend std::istream& inputFromFile(std::istream& is, Person& person);
 };
 
 
@@ -96,8 +92,7 @@ private:
   std::string group;
 public:
   Student();
-  // Student(const std::array<int, 3>& dateArray)
-  //      : birth_date(dateArray[0], dateArray[1], dateArray[2]) {}
+
 
   Student(const std::string& firstName, const std::string& lastName, int id, const std::array<int, 3>& dateArray, int year,const std::string& group);
   Student(const Student& other);
@@ -107,9 +102,9 @@ public:
 
   friend std::istream& operator>>(std::istream& is, Student& student);
   friend std::ostream& operator<<(std::ostream& os, const Student& student);
- // friend std::istream& inputFromFile(std::istream& is, Student& student);
 };
 
+//Comparators
 struct compareByID {
   bool operator()(const Student& s1, const Student& s2) const {
     return s1.getID() < s2.getID();
@@ -128,7 +123,7 @@ struct compareByLastName { // по алфавиту
   }
 };
 
-struct compareByFirstName {
+struct compareByFirstName { // по алфавиту
   bool operator()(const Student& s1, const Student& s2) const {
     return (s1.getFirstName().compare(s2.getFirstName())) == -1;
   }

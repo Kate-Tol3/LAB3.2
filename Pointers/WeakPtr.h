@@ -9,7 +9,7 @@ private:
     ControlBlock<T>* control_block;
 
 public:
-    // Default constructor
+
     WeakPtr() : control_block(nullptr) {}
 
     // Constructor from SharedPtr
@@ -88,16 +88,13 @@ public:
         return SharedPtr<T>(nullptr);
     }
 
-    // Swap two WeakPtr instances
     void swap(WeakPtr& other) noexcept {
         std::swap(control_block, other.control_block);
     }
 
-    // Get the weak reference count
     const int useCount() const { return control_block ? control_block->weak_count : 0; }
     int useCount() { return control_block ? control_block->weak_count : 0; }
 
-    // Check if the managed object is null
     const bool isNull() const { return !control_block || control_block->s_ptr == nullptr; }
     bool isNull() { return !control_block || control_block->s_ptr == nullptr; }
 

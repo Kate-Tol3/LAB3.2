@@ -21,7 +21,6 @@ public:
     virtual const T& operator[](int index) const = 0;
     virtual T& operator[](int index) = 0;
     virtual void set(int index,const T& item) = 0;
-
     virtual void append(const T& item) = 0;
     virtual void prepend(const T& item) = 0;
     virtual void insertAt(const T& item, int index) = 0;

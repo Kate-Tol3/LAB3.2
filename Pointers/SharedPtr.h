@@ -4,15 +4,15 @@
 
 template <typename T>
 struct ControlBlock {
-    T* s_ptr;             // Pointer to the managed object or array
-    int ref_count;        // Strong reference count (SharedPtr)
-    int weak_count;       // Weak reference count (WeakPtr)
-    bool is_array;        // Flag to indicate if s_ptr is an array
+    T* s_ptr;
+    int ref_count;// счётчик сильных ссылок
+    int weak_count;// счётчик слабых ссылок
+    bool is_array;
 
     ControlBlock(T* ptr = nullptr, bool isArray = false)
         : s_ptr(ptr), ref_count(1), weak_count(0), is_array(isArray) {}
 
-    // Destroy the managed object or array, but not the control block itself
+   //уничтожаеи объект, а не сам блок
     void deleteObject() {
         if (is_array) {
             delete[] s_ptr;
@@ -32,11 +32,11 @@ private:
     ControlBlock<T>* control_block;
 
 public:
-    // Constructor for single objects
+    // конструктор для одиночных объектов
     explicit SharedPtr(T* p = nullptr)
         : control_block(p ? new ControlBlock<T>(p, false) : nullptr) {}
 
-    // Constructor for arrays
+    // конструктор для массивов
     explicit SharedPtr(T* p, bool isArray)
         : control_block(p ? new ControlBlock<T>(p, isArray) : nullptr) {}
 
@@ -85,7 +85,6 @@ public:
         return *this;
     }
 
-    // Resource release
     void release() {
         if (control_block) {
             if (--control_block->ref_count == 0) {
@@ -98,7 +97,7 @@ public:
         }
     }
 
-    // Access the object (for non-arrays)
+    // доступ к объекту для не-массивов
     const T& operator*() const {
         if (expired()) throw std::out_of_range("The pointer has expired.\n");
         return *control_block->s_ptr;
@@ -108,7 +107,7 @@ public:
         return *control_block->s_ptr;
     }
 
-    // Access the object or array element via pointer (for arrays)
+    // доступ по указателю для всех обектов
     const T* operator->() const {
         if (expired()) throw std::out_of_range("The pointer has expired.\n");
         return control_block->s_ptr;
@@ -118,7 +117,7 @@ public:
         return control_block->s_ptr;
     }
 
-    // Array subscript operator (only for arrays)
+    // subscript operator только для массивов
     T& operator[](size_t index) {
         if (!control_block || !control_block->is_array) {
             throw std::out_of_range("Not managing an array.\n");

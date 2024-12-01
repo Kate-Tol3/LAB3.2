@@ -432,10 +432,6 @@ private:
         std::string firstName = student.getFirstName();
         std::string lastName = student.getLastName();
 
-        // QFont font = studentListWidget->font();
-        // font.setPointSize(14);  // Устанавливаем размер шрифта 14
-        // studentListWidget->setFont(font);
-
         listWidget->addItem(QString::fromStdString(
             firstName + " " +
             lastName + ", ID: " +
@@ -587,26 +583,26 @@ public:
             }
 
 
-QComboBox {
-    border: 2px solid #a3b9c9;
-    border-radius: 8px;
-    padding: 5px;
-    background-color: #ffffff;
-    font-size: 14px;
-    padding-right: 20px; /* Отступ для текста, чтобы не накладывался на границу */
-}
+            QComboBox {
+                border: 2px solid #a3b9c9;
+                border-radius: 8px;
+                padding: 5px;
+                background-color: #ffffff;
+                font-size: 14px;
+                padding-right: 20px; /* Отступ для текста, чтобы не накладывался на границу */
+            }
 
-QComboBox::drop-down {
-    border: none;
-    width: 0px;
-    height: 0px;
-}
+            QComboBox::drop-down {
+                border: none;
+                width: 0px;
+                height: 0px;
+            }
 
-QComboBox::down-arrow {
-    image: none;
-    width: 0px;
-    height: 0px;
-}
+            QComboBox::down-arrow {
+                image: none;
+                width: 0px;
+                height: 0px;
+            }
 
 
             QListWidget {
@@ -795,29 +791,9 @@ QComboBox::down-arrow {
             displayErrorMessage(e.what());
         }
     }
-
-    // void showComboBoxDropdown(QComboBox* comboBox) {
-    //     // Плавное открытие выпадающего списка с анимацией
-    //     comboBox->showPopup();
-    //     addComboBoxAnimation(comboBox);
-    // }
-    //
-    // void addComboBoxAnimation(QComboBox* comboBox) {
-    //     // Создаем анимацию для высоты выпадающего списка
-    //     QPropertyAnimation* animation = new QPropertyAnimation(comboBox, "viewOpacity");
-    //     animation->setDuration(300);  // Продолжительность анимации в миллисекундах
-    //     animation->setStartValue(0);  // Начальное значение (невидимый)
-    //     animation->setEndValue(1);    // Конечное значение (видимый)
-    //
-    //     // Запуск анимации
-    //     animation->start();
-    // }
-
 };
 
 
-
-// Main function
 int interface(int argc, char *argv[]) {
     QApplication app(argc, argv);
     StudentGUI window;
