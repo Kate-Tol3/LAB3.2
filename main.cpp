@@ -1,14 +1,11 @@
 #include <iostream>
 #include "Test.h"
 #include "Student.h"
+#include "StudentGUI.h"
 
-int main()
+int main(int argc, char* argv[])
 {
-    testAll();
-    // Date date1(5, 10, 2005);
-    // Date date2(6, 11, 2002);
-    // Date date3(7, 4, 2000);
-    // std::cout << date1 << " " <<  date2<< " " <<  date3 << std::endl;
-    // std:;cout << (date1 > date2) << " " << (date1 > date3) << " " << (date2 > date3)<< std::endl;
+    interface(argc, argv);
+    //testAll();
     return 0;
 }

@@ -1,0 +1,77 @@
+First Name: John
+Last Name: Black
+Birth Date: 16/10/1900
+ID: 0
+Enrollment Year: 1920
+Group: Б920-001
+
+First Name: John  Jr
+Last Name: Black
+Birth Date: 04/11/2010
+ID: 6
+Enrollment Year: 2020
+Group: C20-880
+
+First Name: Jeremy
+Last Name: Lee
+Birth Date: 07/10/2003
+ID: 1
+Enrollment Year: 2021
+Group: Б21-880
+
+First Name: Karen
+Last Name: Leo
+Birth Date: 20/01/2000
+ID: 2
+Enrollment Year: 2018
+Group: С20-880
+
+First Name: Leo
+Last Name: Pak
+Birth Date: 21/09/2005
+ID: 3
+Enrollment Year: 2023
+Group: Б23-776
+
+First Name: Anna
+Last Name: Shuu
+Birth Date: 07/08/2008
+ID: 4
+Enrollment Year: 2018
+Group: None
+
+First Name: Gregory
+Last Name: Gilbert A
+Birth Date: 08/05/2001
+ID: 5
+Enrollment Year: 2019
+Group: C19-880
+
+First Name: David
+Last Name: Kat
+Birth Date: 30/12/1995
+ID: 9
+Enrollment Year: 1997
+Group: None
+
+First Name: Laila
+Last Name: Brown
+Birth Date: 14/03/2000
+ID: 10
+Enrollment Year: 2023
+Group: C23-880
+
+First Name: Paula
+Last Name: Sandress
+Birth Date: 10/10/2010
+ID: 8
+Enrollment Year: 2025
+Group: MMM
+
+First Name: Laura
+Last Name: Acermann
+Birth Date: 08/10/2005
+ID: 7
+Enrollment Year: 2023
+Group: Б23-666
+

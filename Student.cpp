@@ -6,6 +6,8 @@
 #include <limits>
 // #include <iomanip>
 #include <iostream>
+#include <sstream>
+
 
 // проверка что строка содержит только буквы
 bool isAlpha(const std::string& str) {
@@ -39,7 +41,7 @@ bool Date::isValidDate(int day, int month, int year) {
 
 std::istream& operator>>(std::istream& is, Date& date) {
     int d, m, y;
-    char separator1, separator2;
+    char separator1;
 
    // std::cout << "Enter date (format: DD/MM/YYYY): ";
     while (true) {
@@ -66,7 +68,7 @@ std::ostream& operator<<(std::ostream& os, const Date& date) {
     return os;
 }
 
-////// методы для класса Person////////////////////////////////////////////
+////// методы класса Person////////////////////////////////////////
 Person::Person() : ID(0), birth_date(std::array<int, 3>{{0, 0, 0}}) {
     std::array<int, 3> temp {{0, 0, 0}};
     birth_date = Date(temp);
@@ -142,6 +144,21 @@ std::ostream& operator<<(std::ostream& os, const Person& person) {
     return os;
 }
 
+std::istream& inputFromFile(std::istream& is, Person& person) {
+    std::string firstName, lastName;
+    int id;
+    std::array<int, 3> date{};
+
+    if (is >> firstName >> lastName >> id >> date[0] >> date[1] >> date[3]) {
+        person = Person(firstName, lastName, id, date);
+    } else {
+        is.clear();
+        is.setstate(std::ios::failbit);
+        throw std::runtime_error("Ошибка чтения данных для Person из файла.");
+    }
+
+    return is;
+}
 
 ////////// методы для класса Student /////////////////////////////
 Student::Student() : Person(), enrollment_year(0), group(){}
@@ -194,41 +211,58 @@ std::ostream& operator<<(std::ostream& os, const Student& student) {
     return os;
 }
 
-// std::istream& inputFromFile(std::istream& is, Person& person) {
-//     std::string firstName;
-//     std::string lastName;
-//     int id;
-//     int dob[3];
+std::istream& inputFromFile(std::istream& is, Student& student) {
+
+    std::string firstName, lastName, group;
+    int id, enrollmentYear;
+    std::array<int, 3> date{};
+
+    if (is >> firstName >> lastName >> id >> date[0] >> date[1] >> date[3] >> enrollmentYear >> group) {
+        student = Student(firstName, lastName, id, date, enrollmentYear, group);
+    } else {
+        is.clear();
+        is.setstate(std::ios::failbit);
+        throw std::runtime_error("Ошибка чтения данных для Person из файла.");
+    }
+
+    return is;
+}
+
+//  std::istream& inputFromFile(std::istream& is, Student& student) {
+//     std::string line, firstName, lastName,group;
+//     int id, enrollmentYear;
+//     std::array<int, 3> date{};
 //
-//     if (is >> firstName >> lastName >> id >> dob[0] >> dob[1] >> dob[2]) {
-//         person = Person(firstName, lastName, id, dob);
+//     auto readField = [&](const std::string& prefix, auto& value) {
+//         return std::getline(is, line) && line.starts_with(prefix) &&
+//                std::istringstream(line.substr(prefix.size())) >> value;
+//     };
+//
+//     auto readDate = [&](const std::string& prefix, int& d, int& m, int& y) {
+//         char delim1, delim2;
+//         return std::getline(is, line) && line.starts_with(prefix) &&
+//                std::istringstream(line.substr(prefix.size())) >> d >> delim1 >> m >> delim2 >> y &&
+//                delim1 == '/' && delim2 == '/' && d > 0 && d <= 31 && m > 0 && m <= 12;
+//     };
+//
+//     if (readField("First Name: ", firstName) &&
+//         readField("Last Name: ", lastName) &&
+//         readDate("Birth Date: ", date[0], date[1], date[2]) &&
+//         readField("ID: ", id) &&
+//         readField("Enrollment Year: ", enrollmentYear) &&
+//         readField("Group: ", group)) {
+//         student = Student(firstName, lastName, id, {date[0], date[1], date[2]}, enrollmentYear, group);
+//
+//         // Ensure an empty line follows the student dat
+//     if (std::getline(is, line) && line.empty()) {
+//         return is;
 //     }
 //     else {
 //         is.clear();
 //         is.setstate(std::ios::failbit);
+//         throw std::runtime_error("Ошибка чтения данных для Person из файла.");
 //     }
-//     return is;
 // }
-//
-// std::istream& inputFromFile(std::istream& is, Student& student) {
-//     std::string firstName;
-//     std::string lastName;
-//     int id;
-//     int dob[3];
-//     int yearOfStudy;
-//
-//     if (is >> firstName >> lastName >> id >> dob[0] >> dob[1] >> dob[2] >> yearOfStudy) {
-//         student = Student(firstName, lastName, id, dob, yearOfStudy);
-//     }
-//     else {
-//         is.clear();
-//         is.setstate(std::ios::failbit);
-//     }
-//
-//     return is;
-// }
-
-
 
 
 

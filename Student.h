@@ -3,10 +3,8 @@
 #define STUDENT_H
 #include <string>
 #include <array>
-#include <iostream>
 #include <ostream>
 #include <stdexcept>
-using namespace std;/////удалить
 
 struct Date {
 
