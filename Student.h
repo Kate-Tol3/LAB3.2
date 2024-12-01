@@ -86,7 +86,7 @@ public:
   Person& operator=(const Person& other);
   friend std::istream& operator>>(std::istream& is, Person& person);
   friend std::ostream& operator<<(std::ostream& os, const Person& person);
-  friend std::istream& inputFromFile(std::istream& is, Person& person);
+  //friend std::istream& inputFromFile(std::istream& is, Person& person);
 };
 
 
@@ -107,7 +107,7 @@ public:
 
   friend std::istream& operator>>(std::istream& is, Student& student);
   friend std::ostream& operator<<(std::ostream& os, const Student& student);
-  friend std::istream& inputFromFile(std::istream& is, Student& student);
+ // friend std::istream& inputFromFile(std::istream& is, Student& student);
 };
 
 struct compareByID {

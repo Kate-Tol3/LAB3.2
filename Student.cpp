@@ -144,21 +144,21 @@ std::ostream& operator<<(std::ostream& os, const Person& person) {
     return os;
 }
 
-std::istream& inputFromFile(std::istream& is, Person& person) {
-    std::string firstName, lastName;
-    int id;
-    std::array<int, 3> date{};
-
-    if (is >> firstName >> lastName >> id >> date[0] >> date[1] >> date[3]) {
-        person = Person(firstName, lastName, id, date);
-    } else {
-        is.clear();
-        is.setstate(std::ios::failbit);
-        throw std::runtime_error("Ошибка чтения данных для Person из файла.");
-    }
-
-    return is;
-}
+// std::istream& inputFromFile(std::istream& is, Person& person) {
+//     std::string firstName, lastName;
+//     int id;
+//     std::array<int, 3> date{};
+//
+//     if (is >> firstName >> lastName >> id >> date[0] >> date[1] >> date[3]) {
+//         person = Person(firstName, lastName, id, date);
+//     } else {
+//         is.clear();
+//         is.setstate(std::ios::failbit);
+//         throw std::runtime_error("Ошибка чтения данных для Person из файла.");
+//     }
+//
+//     return is;
+// }
 
 ////////// методы для класса Student /////////////////////////////
 Student::Student() : Person(), enrollment_year(0), group(){}
@@ -211,22 +211,22 @@ std::ostream& operator<<(std::ostream& os, const Student& student) {
     return os;
 }
 
-std::istream& inputFromFile(std::istream& is, Student& student) {
-
-    std::string firstName, lastName, group;
-    int id, enrollmentYear;
-    std::array<int, 3> date{};
-
-    if (is >> firstName >> lastName >> id >> date[0] >> date[1] >> date[3] >> enrollmentYear >> group) {
-        student = Student(firstName, lastName, id, date, enrollmentYear, group);
-    } else {
-        is.clear();
-        is.setstate(std::ios::failbit);
-        throw std::runtime_error("Ошибка чтения данных для Person из файла.");
-    }
-
-    return is;
-}
+// std::istream& inputFromFile(std::istream& is, Student& student) {
+//
+//     std::string firstName, lastName, group;
+//     int id, enrollmentYear;
+//     std::array<int, 3> date{};
+//
+//     if (is >> firstName >> lastName >> id >> date[0] >> date[1] >> date[3] >> enrollmentYear >> group) {
+//         student = Student(firstName, lastName, id, date, enrollmentYear, group);
+//     } else {
+//         is.clear();
+//         is.setstate(std::ios::failbit);
+//         throw std::runtime_error("Ошибка чтения данных для Person из файла.");
+//     }
+//
+//     return is;
+// }
 
 //  std::istream& inputFromFile(std::istream& is, Student& student) {
 //     std::string line, firstName, lastName,group;
