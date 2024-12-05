@@ -397,9 +397,6 @@
 #include "Sequence/MutableListSequence.h"
 #include "FileFunc.h"
 
-
-
-
 class StudentGUI : public QWidget {
 signals:
     void dummySignal();

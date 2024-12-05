@@ -25,11 +25,11 @@ private:
     }
 
     static int partition(SharedPtr<Sequence<T>> sequence, int left, int right, Comparator comp) {
-        T pivot = (*sequence)[right]; // Choose the last element as pivot
+        T pivot = (*sequence)[right]; // last element as pivot
         int i = left - 1;
 
         for (int j = left; j < right; ++j) {
-            if (comp((*sequence)[j], pivot)) { // If element is less than pivot
+            if (comp((*sequence)[j], pivot)) {
                 ++i;
                 std::swap((*sequence)[i], (*sequence)[j]);
             }

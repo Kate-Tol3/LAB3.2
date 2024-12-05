@@ -15,7 +15,7 @@ public:
             T key = (*sequence)[i];
             int left = 0, right = i;
 
-            // Binary search to find the correct position for 'key'
+            // binary search to find the correct position for key
             while (left < right) {
                 int mid = (left + right) / 2;
 
@@ -25,12 +25,12 @@ public:
                     right = mid;
             }
 
-            // Shift elements to make space for 'key'
+            // shift elements to make space for key
             for (int j = i; j > left; --j) {
                 (*sequence)[j] = (*sequence)[j - 1];
             }
 
-            // Insert 'key' at the correct position
+            // insert key at the correct position
             (*sequence)[left] = key;
         }
     }

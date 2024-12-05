@@ -29,8 +29,6 @@ add_executable(localLab3_2
         Test.h
         StudentGUI.h
         FileFunc.h
-        Unused.cpp
-        Unused.h
 )
 
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
