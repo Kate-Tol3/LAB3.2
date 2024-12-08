@@ -103,9 +103,24 @@ public:
         return result;
     }
 
+    void erase(int index) {
+        if (index < 0 || index >= this->getLength()) {
+            throw IndexOutOfRange();
+        }
+        for (int i = index; i < this->getLength() - 1; ++i) {
+            this->set(i, this->get(i + 1));
+        }
+        this->set(this->getLength() - 1, T());
+        this->array->resize(this->getLength() - 1);
+    }
+
 
     void print() const override{
         this->array->print();
+    }
+
+    void clear() {
+        this->array->resize(0);
     }
 
 };
