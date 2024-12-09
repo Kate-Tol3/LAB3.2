@@ -89,6 +89,7 @@ add_executable(localLab3_2
         AddStudentDialog.h
         AddStudentDialog.cpp
         GUI.cpp
+        testSortsOnLargeData.h
 )
 
 # Линкуем с библиотеками Qt6
