@@ -19,14 +19,14 @@ GUI::GUI(QWidget* parent) : QMainWindow(parent) {
     setWindowTitle("Управление студентами");
     resize(600, 400);
 
-    // Кнопки
+    // кнопки
     addButton = new QPushButton("Добавить студента", this);
     deleteButton = new QPushButton("Удалить студента", this);
     saveButton = new QPushButton("Сохранить в файл", this);
     loadButton = new QPushButton("Загрузить из файла", this);
     sortButton = new QPushButton("Сортировать", this);
 
-    // Выпадающий список для выбора критерия сортировки
+    // выпадающий список выбора компаратора
     sortCriteriaBox = new QComboBox(this);
     sortCriteriaBox->addItem("По ID");
     sortCriteriaBox->addItem("По фамилии");
@@ -47,10 +47,9 @@ GUI::GUI(QWidget* parent) : QMainWindow(parent) {
     sorterBox->addItem("Merge Sort");
     sorterBox->addItem("Shell Sort");
 
-    // Список студентов
+
     studentList = new QListWidget(this);
 
-    // Устанавливаем стиль для всех виджетов в окне
     this->setStyleSheet(R"(
         QWidget {
             background-color: #f0f4f8;
@@ -127,7 +126,6 @@ GUI::GUI(QWidget* parent) : QMainWindow(parent) {
         }
     )");
 
-    // Устанавливаем шрифт для studentListWidget и sortedStudentListWidget
     QFont font = studentList->font();
     font.setPointSize(11);  // Устанавливаем размер шрифта
     studentList->setFont(font);
@@ -154,7 +152,6 @@ GUI::GUI(QWidget* parent) : QMainWindow(parent) {
     setCentralWidget(centralWidget);
 
 
-    // Подключение сигналов и слотов
     connect(addButton, &QPushButton::clicked, this, &GUI::openAddStudentDialog);
     connect(deleteButton, &QPushButton::clicked, this, &GUI::removeSelectedStudent);
     connect(saveButton, &QPushButton::clicked, this, &GUI::saveToFile);
@@ -207,30 +204,21 @@ void GUI::saveToFile() {
 
 void GUI::loadFromFile() {
 
-        // Открытие диалогового окна для выбора файла
+        // диалоговое окно для выбора файла
     QString fileName = QFileDialog::getOpenFileName(this, "Загрузить файл", "", "Text Files (*.txt)");
     if (!fileName.isEmpty()) {
         try {
-            // Чтение студентов из файла с помощью функции ReadStudentsFromFile
+
             SharedPtr<Sequence<Student>> loadedStudents = ReadStudentsFromFile(fileName.toStdString());
-
-            // Преобразование типа Sequence в MutableArraySequence (если необходимо)
             students =  MutableArraySequence<Student>(*loadedStudents);
-
-            // Очистка текущего списка студентов в интерфейсе
             studentList->clear();
-
-            // Добавление студентов из загруженной последовательности в список UI
             for (int i = 0; i < students.getLength(); ++i) {
                 Student student = students.get(i);
                 studentList->addItem(QString::fromStdString(student.getFirstName() + " " + student.getLastName()));
             }
-
-            // Обновление интерфейса
             refreshStudentList();
             QMessageBox::information(this, "Успех", "Данные загружены из файла.");
         } catch (const std::exception& e) {
-            // В случае ошибки выводим сообщение
             QMessageBox::information(this, "Ошибка", e.what());
         }
     }
@@ -269,15 +257,11 @@ void GUI::sortStudents() {
     }();
 
     if (sorter && comparator && students.getLength() > 0) {
-        // Создаем SharedPtr для students
-        SharedPtr<Sequence<Student>> ptrStudents = SharedPtr<Sequence<Student>>(new MutableArraySequence<Student>(students));
 
-        // Сортируем с помощью выбранного алгоритма и компаратора
+        SharedPtr<Sequence<Student>> ptrStudents = SharedPtr<Sequence<Student>>(new MutableArraySequence<Student>(students));
         sorter->sort(ptrStudents, comparator);
 
         students =  MutableArraySequence<Student>(*ptrStudents);
-
-        // Очистка списка и добавление отсортированных студентов в UI
         studentList->clear();
         for (int i = 0; i < students.getLength(); ++i) {
             Student student = students.get(i);
@@ -296,10 +280,9 @@ void GUI::sortStudents() {
         }
     }
 
-    refreshStudentList();  // Обновляем интерфейс
-    delete sorter;  // Освобождаем память
+    refreshStudentList();
+    delete sorter;
 }
-
 
 
 void GUI::refreshStudentList() {

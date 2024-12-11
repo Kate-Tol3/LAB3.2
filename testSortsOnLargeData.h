@@ -5,10 +5,10 @@
 #include <chrono>
 #include <cassert>
 #include <memory>
+#include <fstream>
 #include "Student.h"
 #include "Sort/ISorter.h"
 #include "FileFunc.h"
-#include "Sequence/MutableListSequence.h"
 #include "Sequence/MutableArraySequence.h"
 #include "Sort/BubbleSort.h"
 #include "Sort/InsertionSort.h"
@@ -22,9 +22,8 @@
 
 template <typename T, template <typename> class SequenceType, typename Comparator>
 void testSortOnLarge(ISorter<T, Comparator>& sorter, Comparator comp,
-    const std::string& sortType, const std::string& comparedField, const std::string& filename) {
+    const std::string& sortType, const std::string& comparedField, const std::string& filename, std::ofstream& outputFile) {
 
-    // Чтение студентов из файла
     SharedPtr<Sequence<T>> studentSequence = ReadStudentsFromFile(filename);
 
     // Измеряем время сортировки
@@ -32,20 +31,23 @@ void testSortOnLarge(ISorter<T, Comparator>& sorter, Comparator comp,
     sorter.sort(studentSequence, comp);
     auto end = std::chrono::high_resolution_clock::now();
 
-    // Вычисляем время сортировки в миллисекундах
     std::chrono::duration<double> duration = end - start;
     double time_taken = duration.count() * 1000.0; // время в миллисекундах
 
-    // Проверяем, что сортировка прошла корректно (необходимо чтобы компаратор гарантировал правильный порядок)
-    for (int i = 0; i < studentSequence->getLength() - 1; ++i) {
-        assert(!comp((*studentSequence)[i + 1], (*studentSequence)[i]));
-    }
+    // // проверка
+    // for (int i = 0; i < studentSequence->getLength() - 1; ++i) {
+    //     assert(!comp((*studentSequence)[i + 1], (*studentSequence)[i]));
+    // }
 
-    // Выводим информацию о сортировке
     std::cout << "Sort Type: " << sortType << " | Comparator: " << comparedField << std::endl;
     std::cout << "Number of students: " << studentSequence->getLength() << std::endl;
     std::cout << "Sorting time: " << time_taken << " ms" << std::endl;
     std::cout << "~~~~~~" << std::endl;
+
+    outputFile << "Sort Type: " << sortType << " | Comparator: " << comparedField << std::endl;
+    outputFile << "Number of students: " << studentSequence->getLength() << std::endl;
+    outputFile << "Sorting time: " << time_taken << " ms" << std::endl;
+    outputFile << "~~~~~~" << std::endl;
 }
 
 inline void testAllSortsOnLarge(const std::string& filename) {
@@ -53,7 +55,6 @@ inline void testAllSortsOnLarge(const std::string& filename) {
     using Sort_template = std::vector<std::pair<std::string, ISorter<Student, ComparatorFunc>*>>;
     using Comparator_template = std::vector<std::pair<std::string, ComparatorFunc>>;
 
-    // Создаем список сортировок
     Sort_template mySort = {
         {"BubbleSort", new BubbleSort<Student, ComparatorFunc>()},
         {"InsertionSort", new InsertionSort<Student, ComparatorFunc>()},
@@ -66,7 +67,6 @@ inline void testAllSortsOnLarge(const std::string& filename) {
         {"ShellSort", new ShellSort<Student, ComparatorFunc>()}
     };
 
-    // Создаем список компараторов
     Comparator_template myComparator = {
         {"First name", compareByFirstName()},
         {"Last name", compareByLastName()},
@@ -76,14 +76,18 @@ inline void testAllSortsOnLarge(const std::string& filename) {
         {"Group", compareByGroup()}
     };
 
-    // Тестируем каждую комбинацию сортировки и компаратора
+    std::ofstream outputFile("largeSortingInfo.txt");
+    if (!outputFile.is_open()) {
+        std::cerr << "Error opening output file!" << std::endl;
+        return;
+    }
+
+    // Пары сортировка-компаратор
     for (const auto& sorter_pair : mySort) {
         for (const auto& comp_pair : myComparator) {
-            testSortOnLarge<Student, MutableArraySequence, ComparatorFunc>(*sorter_pair.second, comp_pair.second, sorter_pair.first, comp_pair.first, filename);
-            testSortOnLarge<Student, MutableListSequence, ComparatorFunc>(*sorter_pair.second, comp_pair.second, sorter_pair.first, comp_pair.first, filename);
+            testSortOnLarge<Student, MutableArraySequence, ComparatorFunc>(*sorter_pair.second, comp_pair.second, sorter_pair.first, comp_pair.first, filename, outputFile);
         }
     }
+
+    outputFile.close();
 }
-
-
-

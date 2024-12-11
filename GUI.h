@@ -35,16 +35,13 @@ private:
     QPushButton* saveButton;
     QPushButton* loadButton;
     QPushButton* sortButton;
-
-    QComboBox* sortCriteriaBox; // Комбо-бокс для выбора критерия сортировки
-    QComboBox* sorterBox;    // Комбо-бокс для выбора вида сортировки
-
+    QComboBox* sortCriteriaBox;
+    QComboBox* sorterBox;
     QListWidget* studentList;
 
     // Внутреннее хранилище студентов
     MutableArraySequence<Student> students;
 
-    // Вспомогательные функции
     void refreshStudentList();
 
 };

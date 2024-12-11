@@ -1,10 +1,8 @@
 #ifndef ADDSTUDENTDIALOG_H
 #define ADDSTUDENTDIALOG_H
 
-#include <QDialog>
 #include <QLineEdit>
 #include <QPushButton>
-#include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QMessageBox>
@@ -29,9 +27,6 @@ private:
     QLineEdit* idEdit;
     QLineEdit* groupEdit;
     QSpinBox* enrollmentYearSpinBox;
-    // QLineEdit* dayEdit;
-    // QLineEdit* monthEdit;
-    // QLineEdit* yearEdit;
     QPushButton* addButton;
     QSpinBox* daySpinBox;
     QSpinBox* monthSpinBox;

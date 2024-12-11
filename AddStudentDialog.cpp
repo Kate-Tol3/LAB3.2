@@ -5,7 +5,7 @@
 AddStudentDialog::AddStudentDialog(QWidget* parent) : QDialog(parent) {
     setWindowTitle("Добавить студента");
 
-    setFixedSize(400, 400); // Задаем размер окна (ширина, высота)
+    setFixedSize(400, 400);
 
     firstNameEdit = new QLineEdit(this);
     firstNameEdit->setPlaceholderText("Имя");
@@ -23,7 +23,6 @@ AddStudentDialog::AddStudentDialog(QWidget* parent) : QDialog(parent) {
     enrollmentYearSpinBox->setRange(1900, 2100);
     enrollmentYearSpinBox->setToolTip("Год поступления");
 
-    // Используем QSpinBox для ввода дня, месяца и года
     daySpinBox = new QSpinBox(this);
     daySpinBox->setRange(1, 31);  // День от 1 до 31
     daySpinBox->setToolTip("День (1-31)");
@@ -37,7 +36,7 @@ AddStudentDialog::AddStudentDialog(QWidget* parent) : QDialog(parent) {
     yearSpinBox->setToolTip("Год");
 
     addButton = new QPushButton("Добавить студента", this);
-    addButton->setFixedSize(200, 50); // Увеличенная кнопка
+    addButton->setFixedSize(200, 50);
 
     // Layouts
     QVBoxLayout* layout = new QVBoxLayout(this);
@@ -98,7 +97,6 @@ AddStudentDialog::AddStudentDialog(QWidget* parent) : QDialog(parent) {
             }
         )");
 
-    // Соединение кнопки с обработкой добавления
     connect(addButton, &QPushButton::clicked, this, &AddStudentDialog::onAddButtonClicked);
 }
 
@@ -109,9 +107,9 @@ void AddStudentDialog::onAddButtonClicked() {
         int id = idEdit->text().toInt();
         std::string group = groupEdit->text().toStdString();
         int enrollmentYear = enrollmentYearSpinBox->value();
-        int day = daySpinBox->value();  // Получаем значение из QSpinBox
-        int month = monthSpinBox->value();  // Получаем значение из QSpinBox
-        int year = yearSpinBox->value();  // Получаем значение из QSpinBox
+        int day = daySpinBox->value();
+        int month = monthSpinBox->value();
+        int year = yearSpinBox->value();
 
         if (!Date::isValidDate(day, month, year)) {
             throw std::invalid_argument("Некорректная дата рождения!");
@@ -120,10 +118,9 @@ void AddStudentDialog::onAddButtonClicked() {
         Date birthDate(day, month, year);
         Student newStudent(firstName, lastName, id, {day, month, year}, enrollmentYear, group);
 
-        emit studentAdded(newStudent); // Отправляем сигнал с новым студентом
+        emit studentAdded(newStudent);
         accept();
     } catch (const std::exception& e) {
-        // Обработка ошибок ввода
         QMessageBox::warning(this, "Ошибка", e.what());
     }
 }
